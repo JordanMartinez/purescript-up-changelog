@@ -37,7 +37,6 @@
   "homepage": "https://github.com/purescript-contrib/uplog#readme",
   "devDependencies": {
     "esbuild": "^0.24.0",
-    "purescript-psa": "^0.9.0",
     "purs-backend-es": "^1.4.2"
   }
 }
