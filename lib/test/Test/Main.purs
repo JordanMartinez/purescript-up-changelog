@@ -1,17 +1,17 @@
 module Test.Main where
 
 import Prelude
+import Test.Spec.Runner.Node (runSpecAndExitProcess')
 
 import Control.Monad.Error.Class (class MonadError)
-import Data.Either (either)
 import Data.Lens (Prism', preview, prism')
 import Data.Maybe (Maybe(..))
 import Effect (Effect)
-import Effect.Aff (Aff, Error, Milliseconds(..), runAff_)
+import Effect.Aff (Aff, Error, Milliseconds(..))
 import Effect.Aff.Class (class MonadAff)
 import Effect.Class (class MonadEffect, liftEffect)
 import Effect.Class.Console (log)
-import Effect.Exception (throw, throwException)
+import Effect.Exception (throw)
 import Node.ChildProcess.Types (Exit(..), KillSignal)
 import Node.Encoding (Encoding(..))
 import Node.FS.Aff (mkdtemp)
@@ -25,19 +25,20 @@ import Node.Process as Process
 import Test.Spec (SpecT, afterAll, after_, around_, beforeAll, describe, it, sequential)
 import Test.Spec.Assertions (shouldEqual, shouldNotEqual)
 import Test.Spec.Reporter (consoleReporter)
-import Test.Spec.Runner (defaultConfig, runSpecT)
 import Test.Utils (delDir)
 import UpChangelog.Constants as Constants
+import Test.Spec.Runner.Node.Config as Cfg
 
 main :: Effect Unit
-main = runAff_ (either throwException pure) do
-  void $ join $ runSpecT (defaultConfig { timeout = Just $ Milliseconds 20_000.0 }) [ consoleReporter ] $ sequential spec
+main = do
+  let config = { defaultConfig: Cfg.defaultConfig { timeout = Just $ Milliseconds 20_000.0 }, parseCLIOptions: true }
+  runSpecAndExitProcess' @Aff config [ consoleReporter ] (sequential spec)
 
 spec :: SpecT Aff Unit Aff Unit
 spec = do
   pwd <- liftEffect $ Process.cwd
   let
-    binaryFile = Path.concat [ pwd, "bin", "index.mjs" ]
+    binaryFile = Path.concat [ pwd, "bin", "index.dev.mjs" ]
     pursChangelog cmd args =
       _.getResult =<< execa "node" ([ binaryFile, "--log-debug", cmd ] <> args) identity
     defaultReadme = Path.concat [ Constants.changelogDir, Constants.readmeFile ]

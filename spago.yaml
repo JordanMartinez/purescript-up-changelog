@@ -1,0 +1,7 @@
+workspace:
+  extraPackages:
+    spec-node:
+      git: https://github.com/purescript-spec/purescript-spec-node.git
+      ref: master
+  packageSet:
+    registry: 60.5.0
