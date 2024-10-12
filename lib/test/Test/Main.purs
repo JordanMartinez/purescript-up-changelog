@@ -1,18 +1,17 @@
 module Test.Main where
 
 import Prelude
-import Test.Spec.Runner.Node
+import Test.Spec.Runner.Node (runSpecAndExitProcess')
 
 import Control.Monad.Error.Class (class MonadError)
-import Data.Either (either)
 import Data.Lens (Prism', preview, prism')
 import Data.Maybe (Maybe(..))
 import Effect (Effect)
-import Effect.Aff (Aff, Error, Milliseconds(..), launchAff_, runAff_)
+import Effect.Aff (Aff, Error, Milliseconds(..))
 import Effect.Aff.Class (class MonadAff)
 import Effect.Class (class MonadEffect, liftEffect)
 import Effect.Class.Console (log)
-import Effect.Exception (throw, throwException)
+import Effect.Exception (throw)
 import Node.ChildProcess.Types (Exit(..), KillSignal)
 import Node.Encoding (Encoding(..))
 import Node.FS.Aff (mkdtemp)
