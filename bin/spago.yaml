@@ -1,0 +1,23 @@
+package:
+  name: chnglg-bin
+  dependencies:
+    - aff
+    - argparse-basic
+    - arrays
+    - bifunctors
+    - chnglg-lib
+    - console
+    - effect
+    - either
+    - maybe
+    - node-path
+    - node-process
+    - prelude
+    - strings
+    - tuples
+    - versions
+  test:
+    main: Test.Bin.Main
+    dependencies:
+      - console
+      - node-process

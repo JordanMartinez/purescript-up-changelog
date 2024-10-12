@@ -9,16 +9,16 @@
     "bin/index.mjs"
   ],
   "scripts": {
-    "build": "spago -x bin/spago.dhall build --purs-args=\"--strict --censor-lib -g corefn,js\"",
+    "build": "spago build -p chnglg-bin",
     "bundle:optimize": "purs-backend-es build --int-tags",
     "bundle:esbuild": "esbuild --bundle --outfile=bin/index.mjs --platform=node --format=esm --charset=utf8 bin/index.prod.mjs",
     "bundle:exec": "chmod +x bin/index.mjs",
     "bundle": "npm run build && npm run bundle:optimize && npm run bundle:esbuild && npm run bundle:exec",
-    "build:test": "spago build --purs-args=\"--strict --censor-lib\"",
-    "test:ci": "spago -x test.dhall test",
+    "build:test": "spago build --censor-stats --strict --ensure-ranges --pedantic-packages",
+    "test:ci": "spago test --offline --censor-stats --strict --pedantic-packages",
     "test": "npm run build:test && npm run bundle && npm run test:ci",
-    "format": "purs-tidy format-in-place src bin test",
-    "check": "purs-tidy check src bin test",
+    "format": "purs-tidy format-in-place lib/src lib/test bin/src bin/test",
+    "check": "purs-tidy check lib/src lib/test bin/src bin/test",
     "prepublishOnly": "rm -rf output bundle bin/index.js && npm run bundle"
   },
   "repository": {
@@ -36,11 +36,8 @@
   },
   "homepage": "https://github.com/purescript-contrib/uplog#readme",
   "devDependencies": {
-    "esbuild": "^0.19.3",
-    "purescript": "^0.15.10",
-    "purescript-psa": "^0.8.2",
-    "purs-backend-es": "^1.4.2",
-    "purs-tidy": "^0.10.0",
-    "spago": "^0.21.0"
+    "esbuild": "^0.24.0",
+    "purescript-psa": "^0.9.0",
+    "purs-backend-es": "^1.4.2"
   }
 }

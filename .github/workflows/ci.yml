@@ -4,10 +4,7 @@ on:
   push:
     branches: [master]
   pull_request:
-
-defaults:
-  run:
-    shell: bash
+    branches: [master]
 
 jobs:
   build:
@@ -18,29 +15,24 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
-      - uses: actions/checkout@v3
-        with:
-          # Fetch all history and tags to ensure we get all commits made
-          # in the PR. Otherwise, we only fetch the commit that
-          # merges the PR's HEAD to the base branch and prune everything else.
-          # This causes the PR numbers to not appear in the commit titles
-          # and causes the `update` command's test to fail.
-          fetch-depth: 0
-      - uses: actions/setup-node@v3
-        with:
-          node-version: "lts/*"
+      - uses: actions/checkout@v4
 
-      - uses: actions/cache@v3
-        # This cache uses the .dhall files to know when it should reinstall
-        # and rebuild packages. It caches both the installed packages from
-        # the `.spago` directory and compilation artifacts from the `output`
-        # directory. When restored the compiler will rebuild any files that
-        # have changed.
+      - name: Set up a PureScript toolchain
+        uses: purescript-contrib/setup-purescript@main
         with:
-          key: ${{ runner.os }}-spago-${{ hashFiles('**/*.dhall') }}
+          purescript: "latest"
+          purs-tidy: "latest"
+          spago: "unstable"
+
+      - name: Cache PureScript dependencies
+        uses: actions/cache@v4
+        with:
+          key: ${{ runner.os }}-spago-${{ hashFiles('**/spago.lock') }}
           path: |
             .spago
             output
+
+      - uses: actions/setup-node@v4
 
       - name: Install dependencies
         run: npm install
@@ -51,7 +43,7 @@ jobs:
       - name: Build bin
         run: npm run bundle
 
-      - name: "Run tests"
+      - name: Run tests
         run: npm run test:ci
 
       - name: Verify formatting (Ubuntu only)

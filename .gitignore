@@ -12,3 +12,6 @@
 /bin/index.mjs
 /.vscode
 /output-es/
+.psc-ide-port
+/init*
+.spec-results

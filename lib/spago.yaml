@@ -1,0 +1,41 @@
+package:
+  name: chnglg-lib
+  dependencies:
+    - aff
+    - argonaut-codecs
+    - arrays
+    - console
+    - control
+    - datetime
+    - effect
+    - either
+    - exceptions
+    - fetch
+    - filterable
+    - foldable-traversable
+    - foreign
+    - formatters
+    - integers
+    - maybe
+    - newtype
+    - node-buffer
+    - node-execa
+    - node-fs
+    - node-path
+    - nullable
+    - parsing
+    - precise-datetime
+    - prelude
+    - strings
+    - transformers
+    - tuples
+    - versions
+  test:
+    main: Test.Main
+    dependencies:
+      - console
+      - node-child-process
+      - node-process
+      - profunctor-lenses
+      - spec
+      - spec-node
